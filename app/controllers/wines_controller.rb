@@ -1,6 +1,7 @@
 class WinesController < ApplicationController
   before_action :set_wine, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+  before_action :authorize_admin!, except: [:index, :show]
 
   # GET /wines
   # GET /wines.json
@@ -15,30 +16,21 @@ class WinesController < ApplicationController
 
   # GET /wines/new
   def new
-    if current_user.admin?
-      @wine = Wine.new
-      @strains = Strain.all
-      @wine.assemblies.build
+    @wine = Wine.new
+    @strains = Strain.all
+    @wine.assemblies.build
 
-      @oenologists = Oenologist.all
-      @wine.evaluations.build
-    else
-      redirect_to root_path, notice: 'No eres Peter, no puedes cambiar nada'
-    end
-    
+    @oenologists = Oenologist.all
+    @wine.evaluations.build
   end
 
   # GET /wines/1/edit
   def edit
-    if current_user.admin?
-      @strains = Strain.all
-      @wine.assemblies.build
+    @strains = Strain.all
+    @wine.assemblies.build
 
-      @oenologists = Oenologist.all
-      @wine.evaluations.build
-    else
-      redirect_to root_path, notice: 'No eres Peter, no puedes cambiar nada'
-    end
+    @oenologists = Oenologist.all
+    @wine.evaluations.build
   end
 
   # POST /wines
