@@ -17,15 +17,14 @@
     <% @wines.each do |wine| %>
       <tr>
         <td><%= wine.name %></td>
-        <td><%= wine.year %></td>
+        <td><%= wine.year.year %></td>
         <td><%= wine.vineyard %></td>
         <td><% wine.assemblies.includes(:strain).references(:strain).order("name ASC").each do |assembly|%>
-            <li>
-              <%= assembly.strain.name %>
-              <p>
-                (<%= assembly.percent %> %)
-              </p>
-            </li>
+          <li>
+            <%= assembly.strain.name %>
+            <span>(<%= assembly.percent %> %)</span>
+          </li>
+              
           <% end %>
         </td>
         <td><%= link_to 'Show', wine %></td>
@@ -38,4 +37,7 @@
 
 <br>
 
-<%= link_to 'New Wine', new_wine_path %>
+<% if current_user.admin? %>
+  <%= link_to 'New Wine', new_wine_path %>
+<% end %>
+<%= link_to 'Sign out', destroy_user_session_path, method: :delete %>

@@ -18,7 +18,7 @@
 
   <div class="field">
     <%= form.label :year %>
-    <%= form.date_select :year %>
+    <%= form.date_select :year%>
   </div>
 
   <div class="field">
@@ -36,6 +36,16 @@
     <%= link_to_add_association "Otra?", form, :assemblies %>
   </div>
 
+  <div id="evaluations">
+    <%= form.fields_for :evaluations do |f| %>
+      <%= render 'evaluation_fields', :f => f %>
+    <% end %>
+  </div>  
+
+  <div class="links">
+    <%= link_to_add_association "Otra?", form, :evaluations %>
+  </div>
+  
   <div class="actions">
     <%= form.submit %>
   </div>

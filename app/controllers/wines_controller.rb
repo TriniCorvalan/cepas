@@ -1,5 +1,6 @@
 class WinesController < ApplicationController
   before_action :set_wine, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /wines
   # GET /wines.json
@@ -14,13 +15,30 @@ class WinesController < ApplicationController
 
   # GET /wines/new
   def new
-    @wine = Wine.new
-    @strains = Strain.all
-    @wine.assemblies.build
+    if current_user.admin?
+      @wine = Wine.new
+      @strains = Strain.all
+      @wine.assemblies.build
+
+      @oenologists = Oenologist.all
+      @wine.evaluations.build
+    else
+      redirect_to root_path, notice: 'No eres Peter, no puedes cambiar nada'
+    end
+    
   end
 
   # GET /wines/1/edit
   def edit
+    if current_user.admin?
+      @strains = Strain.all
+      @wine.assemblies.build
+
+      @oenologists = Oenologist.all
+      @wine.evaluations.build
+    else
+      redirect_to root_path, notice: 'No eres Peter, no puedes cambiar nada'
+    end
   end
 
   # POST /wines
@@ -56,10 +74,14 @@ class WinesController < ApplicationController
   # DELETE /wines/1
   # DELETE /wines/1.json
   def destroy
-    @wine.destroy
-    respond_to do |format|
-      format.html { redirect_to wines_url, notice: 'Wine was successfully destroyed.' }
-      format.json { head :no_content }
+    if current_user.admin?
+      @wine.destroy
+      respond_to do |format|
+        format.html { redirect_to wines_url, notice: 'Wine was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to root_path, notice: 'No eres Peter, no puedes cambiar nada'
     end
   end
 
@@ -71,6 +93,6 @@ class WinesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def wine_params
-      params.require(:wine).permit(:name, :year, :vineyard, assemblies_attributes: [:percent, :strain_id])
+      params.require(:wine).permit(:name, :year, :vineyard, assemblies_attributes: [:percent, :strain_id], evaluations_attributes: [:grade, :oenologist_id])
     end
 end

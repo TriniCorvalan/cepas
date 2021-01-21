@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grade: MyString
+  wine: one
+  oenologist: one
+
+two:
+  grade: MyString
+  wine: two
+  oenologist: two

@@ -1,0 +1,5 @@
+  <div class="field">
+    <%= f.label :oenologist_id %>
+    <%= f.select :oenologist_id, options_from_collection_for_select(@oenologists, :id, :name) %>
+    <%= f.range_field :grade %>
+  </div>

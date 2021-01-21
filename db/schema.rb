@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_20_232333) do
+ActiveRecord::Schema.define(version: 2021_01_21_045250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,10 +25,55 @@ ActiveRecord::Schema.define(version: 2021_01_20_232333) do
     t.index ["wine_id"], name: "index_assemblies_on_wine_id"
   end
 
+  create_table "evaluations", force: :cascade do |t|
+    t.string "grade"
+    t.bigint "wine_id"
+    t.bigint "oenologist_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["oenologist_id"], name: "index_evaluations_on_oenologist_id"
+    t.index ["wine_id"], name: "index_evaluations_on_wine_id"
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "jobs_oenologists", id: false, force: :cascade do |t|
+    t.bigint "job_id"
+    t.bigint "oenologist_id"
+    t.index ["job_id"], name: "index_jobs_oenologists_on_job_id"
+    t.index ["oenologist_id"], name: "index_jobs_oenologists_on_oenologist_id"
+  end
+
+  create_table "oenologists", force: :cascade do |t|
+    t.string "name"
+    t.integer "age"
+    t.string "nationality"
+    t.string "workplace"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "strains", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "admin", default: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "wines", force: :cascade do |t|
@@ -41,4 +86,8 @@ ActiveRecord::Schema.define(version: 2021_01_20_232333) do
 
   add_foreign_key "assemblies", "strains"
   add_foreign_key "assemblies", "wines"
+  add_foreign_key "evaluations", "oenologists"
+  add_foreign_key "evaluations", "wines"
+  add_foreign_key "jobs_oenologists", "jobs"
+  add_foreign_key "jobs_oenologists", "oenologists"
 end
