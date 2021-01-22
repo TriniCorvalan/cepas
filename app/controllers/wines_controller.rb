@@ -29,7 +29,7 @@ class WinesController < ApplicationController
     @strains = Strain.all
     @wine.assemblies.build
 
-    @oenologists = Oenologist.all
+    @oenologists = Oenologist.order("age DESC")
     @wine.evaluations.build
   end
 
@@ -85,6 +85,6 @@ class WinesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def wine_params
-      params.require(:wine).permit(:name, :year, :vineyard, assemblies_attributes: [:percent, :strain_id], evaluations_attributes: [:grade, :oenologist_id])
+      params.require(:wine).permit(:id, :name, :year, :vineyard, assemblies_attributes: [:id, :percent, :strain_id, :_destroy], evaluations_attributes: [:id, :grade, :oenologist_id, :_destroy])
     end
 end

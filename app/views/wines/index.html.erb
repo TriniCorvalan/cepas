@@ -9,6 +9,7 @@
       <th>Year</th>
       <th>Vineyard</th>
       <th>Strains</th>
+      <th>Evaluation</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -19,12 +20,19 @@
         <td><%= wine.name %></td>
         <td><%= wine.year.year %></td>
         <td><%= wine.vineyard %></td>
-        <td><% wine.assemblies.includes(:strain).references(:strain).order("name ASC").each do |assembly|%>
+        <td><% wine.assemblies.includes(:strain).references(:strain).order("name ASC").each do |assembly| %>
           <li>
             <%= assembly.strain.name %>
             <span>(<%= assembly.percent %> %)</span>
           </li>
-              
+          <% end %>
+        </td>
+        <td> <% wine.evaluations.includes(:oenologist).references(:oenologist).order("age ASC").each do |evaluation|  %>
+          <li>
+            <p>Grade: <%= evaluation.grade %></p>
+            <p>Oenologist: <%= evaluation.oenologist.name %></p>
+            <p>Age: <%= evaluation.oenologist.age %></p>
+          </li>
           <% end %>
         </td>
         <td><%= link_to 'Show', wine %></td>

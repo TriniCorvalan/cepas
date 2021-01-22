@@ -15,5 +15,50 @@
   <%= @wine.vineyard %>
 </p>
 
+<p>
+  <strong>Strains</strong><tbody>
+    <% @wine.assemblies.includes(:strain).references(:strain).order("name ASC").each do |assembly|%>
+      <li>
+        <%= assembly.strain.name %>
+        <span>(<%= assembly.percent %> %)</span>
+      </li>
+    <% end %>
+</p>
+
+<p>
+  <strong>Evaluations:</strong>
+  <table>
+    <thead>
+      <tr>
+        <th>Grade</th>
+        <th>Oenologist</th>
+        <th>Age</th>
+        <th>Nationality</th>
+        <th>Workplace</th>
+        <th>Positions</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+  
+    <tbody>
+      <% @wine.evaluations.each do |evaluation| %>
+        <tr>
+          <td><%= evaluation.grade %></td>
+          <td><%= evaluation.oenologist.name %></td>
+          <td><%= evaluation.oenologist.age %></td>
+          <td><%= evaluation.oenologist.nationality %></td>
+          <td><%= evaluation.oenologist.workplace %></td>
+          <td><% evaluation.oenologist.jobs.each do |job|%>
+            <li>
+              <%= job.position %>
+            </li>
+                
+            <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+
 <%= link_to 'Edit', edit_wine_path(@wine) %> |
 <%= link_to 'Back', wines_path %>
