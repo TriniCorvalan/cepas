@@ -36,6 +36,7 @@
     <%= link_to_add_association "Otra?", form, :assemblies %>
   </div>
 
+  <% if @oenologists %>
   <div id="evaluations">
     <%= form.fields_for :evaluations do |f| %>
       <%= render 'evaluation_fields', :f => f %>
@@ -45,6 +46,7 @@
   <div class="links">
     <%= link_to_add_association "Otra?", form, :evaluations %>
   </div>
+  <% end %>
   
   <div class="actions">
     <%= form.submit %>

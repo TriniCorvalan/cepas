@@ -20,17 +20,17 @@ class WinesController < ApplicationController
     @strains = Strain.all
     @wine.assemblies.build
 
-    @oenologists = Oenologist.all
-    @wine.evaluations.build
+    # @oenologists = Oenologist.all
+    # @wine.evaluations.build
   end
 
   # GET /wines/1/edit
   def edit
     @strains = Strain.all
-    @wine.assemblies.build
+    @wine.assemblies.build unless @wine.assemblies.present?
 
     @oenologists = Oenologist.order("age DESC")
-    @wine.evaluations.build
+    @wine.evaluations.build unless @wine.evaluations.present?
   end
 
   # POST /wines
@@ -81,6 +81,11 @@ class WinesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_wine
       @wine = Wine.find(params[:id])
+    end
+
+    def set_assembly
+      @wine = Wine.find(params[:id])
+      @assembly = Assembly.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
